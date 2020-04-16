@@ -3,8 +3,8 @@ const pug = require('pug');
 require('dotenv').config();
 
 const _fromEmail = {
-    email: 'fayazfz07@gmail.com',
-    name: 'Fayaz'
+    email: process.env.SENDGRID_EMAIL,
+    name: process.env.SENDGRID_USERNAME
 };
 
 function sendAPIKeyThroughEmail(email, apiKey) {
