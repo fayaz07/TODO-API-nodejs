@@ -4,6 +4,28 @@ const verify_token = require('../validators/token_verification/verify_token');
 const Auth = require('../models/auth');
 const incrementAPIUsage = require('../routes/log_usage');
 
+// get all todos
+router.get('/', verify_token, incrementAPIUsage, async(req, res) => {
+    try {
+        //const auth = await Auth.findOne({ email: req.user.email });
+        const auth = req.auth;
+        if (!auth) {
+            return res.status(401).json({ status: 'failed', message: 'Invalid user' });
+        }
+
+        const todos = await Todo.find({ user_id: auth._id, removed: false }, { removed: 0 }).sort([
+            ['createdAt', 'descending']
+        ]);
+
+
+        return res.status(200).json({ status: 'success', message: 'Fetched all todos', todos: todos });
+    } catch (err) {
+        console.log('unable to fetch a todo');
+        console.log(err);
+        return res.status(500).json({ status: 'failed', message: 'Internal server error', error: err })
+    }
+})
+
 // create a todo
 router.post('/', verify_token, incrementAPIUsage, async(req, res) => {
 
@@ -69,6 +91,57 @@ router.patch('/', verify_token, incrementAPIUsage, async(req, res) => {
     }
 })
 
+// fetch all pending todos
+router.get('/pending', verify_token, incrementAPIUsage, async(req, res) => {
+    try {
+        //const auth = await Auth.findOne({ email: req.user.email });
+        const auth = req.auth;
+        if (!auth) {
+            return res.status(401).json({ status: 'failed', message: 'Invalid user' });
+        }
+
+        const todos = await Todo.find({
+            user_id: auth._id,
+            removed: false,
+            status: "Pending"
+        }, { removed: 0 }).sort([
+            ['createdAt', 'descending']
+        ]);
+
+        return res.status(200).json({ status: 'success', message: 'Fetched all pending todos', todos: todos });
+    } catch (err) {
+        console.log('unable to fetch all pending todos');
+        console.log(err);
+        return res.status(500).json({ status: 'failed', message: 'Internal server error', error: err })
+    }
+})
+
+// get all completed todos
+router.get('/completed', verify_token, incrementAPIUsage, async(req, res) => {
+    try {
+        //const auth = await Auth.findOne({ email: req.user.email });
+        const auth = req.auth;
+        if (!auth) {
+            return res.status(401).json({ status: 'failed', message: 'Invalid user' });
+        }
+
+        const todos = await Todo.find({
+            user_id: auth._id,
+            removed: false,
+            status: "Completed"
+        }, { removed: 0 }).sort([
+            ['createdAt', 'descending']
+        ]);
+
+
+        return res.status(200).json({ status: 'success', message: 'Fetched all completed todos', todos: todos });
+    } catch (err) {
+        console.log('unable to fetch all completed todos');
+        console.log(err);
+        return res.status(500).json({ status: 'failed', message: 'Internal server error', error: err })
+    }
+})
+
 // mark as completed
 router.patch('/complete', verify_token, incrementAPIUsage, async(req, res) => {
     try {
@@ -117,78 +190,6 @@ router.post('/remove', verify_token, incrementAPIUsage, async(req, res) => {
     }
 })
 
-// get all todos
-router.get('/', verify_token, incrementAPIUsage, async(req, res) => {
-    try {
-        //const auth = await Auth.findOne({ email: req.user.email });
-        const auth = req.auth;
-        if (!auth) {
-            return res.status(401).json({ status: 'failed', message: 'Invalid user' });
-        }
 
-        const todos = await Todo.find({ user_id: auth._id, removed: false }, { removed: 0 }).sort([
-            ['createdAt', 'descending']
-        ]);
-
-
-        return res.status(200).json({ status: 'success', message: 'Fetched all todos', todos: todos });
-    } catch (err) {
-        console.log('unable to fetch a todo');
-        console.log(err);
-        return res.status(500).json({ status: 'failed', message: 'Internal server error', error: err })
-    }
-})
-
-// fetch all pending todos
-router.get('/pending', verify_token, incrementAPIUsage, async(req, res) => {
-    try {
-        //const auth = await Auth.findOne({ email: req.user.email });
-        const auth = req.auth;
-        if (!auth) {
-            return res.status(401).json({ status: 'failed', message: 'Invalid user' });
-        }
-
-        const todos = await Todo.find({
-            user_id: auth._id,
-            removed: false,
-            status: "Pending"
-        }, { removed: 0 }).sort([
-            ['createdAt', 'descending']
-        ]);
-
-
-        return res.status(200).json({ status: 'success', message: 'Fetched all pending todos', todos: todos });
-    } catch (err) {
-        console.log('unable to fetch all pending todos');
-        console.log(err);
-        return res.status(500).json({ status: 'failed', message: 'Internal server error', error: err })
-    }
-})
-
-// get all completed todos
-router.get('/completed', verify_token, incrementAPIUsage, async(req, res) => {
-    try {
-        //const auth = await Auth.findOne({ email: req.user.email });
-        const auth = req.auth;
-        if (!auth) {
-            return res.status(401).json({ status: 'failed', message: 'Invalid user' });
-        }
-
-        const todos = await Todo.find({
-            user_id: auth._id,
-            removed: false,
-            status: "Completed"
-        }, { removed: 0 }).sort([
-            ['createdAt', 'descending']
-        ]);
-
-
-        return res.status(200).json({ status: 'success', message: 'Fetched all completed todos', todos: todos });
-    } catch (err) {
-        console.log('unable to fetch all completed todos');
-        console.log(err);
-        return res.status(500).json({ status: 'failed', message: 'Internal server error', error: err })
-    }
-})
 
 module.exports = router;

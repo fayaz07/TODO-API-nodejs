@@ -76,12 +76,12 @@ paths:
     x-swagger-router-controller: USAGE    
 
 
-  /usage:
+  /todo:
     get:
       tags:
-        - usage
-      description: Returns the api usage details
-      operationId: get-api-usage
+        - todo
+      description: Returns all todos
+      operationId: get-all-todos
       parameters:
         - name: auth-token
           in: header
@@ -91,20 +91,220 @@ paths:
               
       responses:
         "200":
-          description: Successfully fetched api usage details for user.
+          description: Fetched all todos.
         "400":
           description: Bad request, caused by passing invalid/null values for email and password field.
+        "40`":
+          description: Unauthorized.
         "500":
           description: Internal server error.  
       security:
         - JWT: []      
-    x-swagger-router-controller: USAGE    
 
+    post:    
+      tags:
+        - todo
+      description: Created todo
+      operationId: create-todo
+      parameters:
+        - name: auth-token
+          in: header
+          required: true
+          schema: 
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZheWF6LmVkY0BnbWFpbC5jb20iLCJpYXQiOjE1ODY5NjI3NjAsImV4cCI6MTU4OTU1NDc2MH0.hGG9G15_zPmS7eyS1naa5qCVWjJ6GTl3ETxwfemBids"
+        - name: todo-details
+          in: body
+          required: true
+          schema: 
+            example:              
+              title: Turn off laptop
+              description: turn off laptop after using it during the night time
+              image: https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=751&q=80
+              due_on: "2020-04-15T17:01:32.507Z"
+             
+      responses:
+        "200":
+          description: Created todo.
+        "400":
+          description: Bad request, caused by passing invalid/null values for email and password field.
+        "40`":
+          description: Unauthorized.
+        "500":
+          description: Internal server error.  
+      security:
+        - JWT: []      
+
+    patch:    
+      tags:
+        - todo
+      description: Update todo
+      operationId: update-todo
+      parameters:
+        - name: auth-token
+          in: header
+          required: true
+          schema: 
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZheWF6LmVkY0BnbWFpbC5jb20iLCJpYXQiOjE1ODY5NjI3NjAsImV4cCI6MTU4OTU1NDc2MH0.hGG9G15_zPmS7eyS1naa5qCVWjJ6GTl3ETxwfemBids"
+        - name: todo-details
+          in: body
+          required: true
+          schema: 
+            example: 
+              todo_id: 5e9742c3af626d26f1c72d4f             
+              title: Turn off laptop, updated
+              description: turn off laptop after using it during the night time
+              image: https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=751&q=80
+              due_on: "2020-04-15T17:01:32.507Z"
+             
+      responses:
+        "200":
+          description: Updated todo.
+        "400":
+          description: Bad request, caused by passing invalid/null values for email and password field.
+        "40`":
+          description: Unauthorized.
+        "500":
+          description: Internal server error.  
+      security:
+        - JWT: []      
+
+  /todo/pending:
+    get:
+      tags:
+        - todo
+      description: Returns all pending todos
+      operationId: get-all-pending-todos
+      parameters:
+        - name: auth-token
+          in: header
+          required: true
+          schema: 
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZheWF6LmVkY0BnbWFpbC5jb20iLCJpYXQiOjE1ODY5NjI3NjAsImV4cCI6MTU4OTU1NDc2MH0.hGG9G15_zPmS7eyS1naa5qCVWjJ6GTl3ETxwfemBids"
+              
+      responses:
+        "200":
+          description: Fetched all pending todos
+        "400":
+          description: Bad request, caused by passing invalid/null values for email and password field.
+        "40`":
+          description: Unauthorized.
+        "500":
+          description: Internal server error.  
+      security:
+        - JWT: []      
+
+  /todo/completed:
+    get:
+      tags:
+        - todo
+      description: Returns all completed todos
+      operationId: get-all-completed-todos
+      parameters:
+        - name: auth-token
+          in: header
+          required: true
+          schema: 
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZheWF6LmVkY0BnbWFpbC5jb20iLCJpYXQiOjE1ODY5NjI3NjAsImV4cCI6MTU4OTU1NDc2MH0.hGG9G15_zPmS7eyS1naa5qCVWjJ6GTl3ETxwfemBids"
+              
+      responses:
+        "200":
+          description: Fetched all completed todos
+        "400":
+          description: Bad request, caused by passing invalid/null values for email and password field.
+        "40`":
+          description: Unauthorized.
+        "500":
+          description: Internal server error.  
+      security:
+        - JWT: []              
+
+    x-swagger-router-controller: TODO    
+
+  /todo/complete:
+    patch:    
+      tags:
+        - todo
+      description: Mark a todo as completed
+      operationId: complete-todo
+      parameters:
+        - name: auth-token
+          in: header
+          required: true
+          schema: 
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZheWF6LmVkY0BnbWFpbC5jb20iLCJpYXQiOjE1ODY5NjI3NjAsImV4cCI6MTU4OTU1NDc2MH0.hGG9G15_zPmS7eyS1naa5qCVWjJ6GTl3ETxwfemBids"
+        - name: todo-details
+          in: body
+          required: true
+          schema: 
+            example: 
+              todo_id: 5e9742c3af626d26f1c72d4f             
+             
+      responses:
+        "200":
+          description: Marked todo as complete.
+        "400":
+          description: Bad request, caused by passing invalid/null values for email and password field.
+        "40`":
+          description: Unauthorized.
+        "500":
+          description: Internal server error.  
+      security:
+        - JWT: []          
+
+  /todo/remove:
+    post:    
+      tags:
+        - todo
+      description: Remove a todo
+      operationId: remove-todo
+      parameters:
+        - name: auth-token
+          in: header
+          required: true
+          schema: 
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZheWF6LmVkY0BnbWFpbC5jb20iLCJpYXQiOjE1ODY5NjI3NjAsImV4cCI6MTU4OTU1NDc2MH0.hGG9G15_zPmS7eyS1naa5qCVWjJ6GTl3ETxwfemBids"
+        - name: todo-details
+          in: body
+          required: true
+          schema: 
+            example: 
+              todo_id: 5e9742c3af626d26f1c72d4f             
+             
+      responses:
+        "200":
+          description: Removed a todo.
+        "400":
+          description: Bad request, caused by passing invalid/null values for email and password field.
+        "40`":
+          description: Unauthorized.
+        "500":
+          description: Internal server error.  
+      security:
+        - JWT: []                  
 
   /swagger:
     x-swagger-pipe: swagger_raw
 
 definitions:
+  Todo:
+    required:
+      - title
+      - description
+    properties:
+      user_id: 
+        type: string
+      title: 
+        type: string
+      description: 
+        type: string
+      image: 
+        type: string,  
+      completed_on:
+        type: string
+      due_on:
+        type: string
+      status: 
+        type: string
   ErrorResponse:
     required:
     - message
