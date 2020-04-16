@@ -1,0 +1,113 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: TODO-API
+host: localhost:9000
+basePath: /api/v1/
+schemes:
+- http
+- https
+consumes:
+- application/json
+produces:
+- application/json
+
+
+tags:
+  - name: auth
+    description: all about authentication
+  - name: usage
+    description: all about usage
+  - name: todo
+    description: all about todo     
+
+
+paths:
+
+  # auth 
+  /auth/login:
+    post:
+      tags:
+        - auth
+      description: Consumes email and sends an api key to the end-user
+      operationId: get-api-key
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema: 
+            example: 
+              email: "16211a05f7@bvrit.ac.in"
+              
+      responses:
+        "201":
+          description: Created. A verification link has been sent to your email, which is valid for an hour, please verify your email in order to login.
+        "400":
+          description: Bad request, caused by passing invalid/null values for email and password field.
+        "500":
+          description: Internal server error.  
+      security:
+        - JWT: []      
+    x-swagger-router-controller: REGISTER
+
+
+  /usage:
+    get:
+      tags:
+        - usage
+      description: Returns the api usage details
+      operationId: get-api-usage
+      parameters:
+        - name: auth-token
+          in: header
+          required: true
+          schema: 
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZheWF6LmVkY0BnbWFpbC5jb20iLCJpYXQiOjE1ODY5NjI3NjAsImV4cCI6MTU4OTU1NDc2MH0.hGG9G15_zPmS7eyS1naa5qCVWjJ6GTl3ETxwfemBids"
+              
+      responses:
+        "200":
+          description: Successfully fetched api usage details for user.
+        "400":
+          description: Bad request, caused by passing invalid/null values for email and password field.
+        "500":
+          description: Internal server error.  
+      security:
+        - JWT: []      
+    x-swagger-router-controller: USAGE    
+
+
+  /usage:
+    get:
+      tags:
+        - usage
+      description: Returns the api usage details
+      operationId: get-api-usage
+      parameters:
+        - name: auth-token
+          in: header
+          required: true
+          schema: 
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZheWF6LmVkY0BnbWFpbC5jb20iLCJpYXQiOjE1ODY5NjI3NjAsImV4cCI6MTU4OTU1NDc2MH0.hGG9G15_zPmS7eyS1naa5qCVWjJ6GTl3ETxwfemBids"
+              
+      responses:
+        "200":
+          description: Successfully fetched api usage details for user.
+        "400":
+          description: Bad request, caused by passing invalid/null values for email and password field.
+        "500":
+          description: Internal server error.  
+      security:
+        - JWT: []      
+    x-swagger-router-controller: USAGE    
+
+
+  /swagger:
+    x-swagger-pipe: swagger_raw
+
+definitions:
+  ErrorResponse:
+    required:
+    - message
+    properties:
+      message:
+        type: string
