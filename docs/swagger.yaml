@@ -2,10 +2,10 @@ swagger: "2.0"
 info:
   version: 1.0.0
   title: TODO-API
-host: localhost:9000
+host: https://todo-7.herokuapp.com
 basePath: /api/v1/
 schemes:
-- http
+#- http
 - https
 consumes:
 - application/json
