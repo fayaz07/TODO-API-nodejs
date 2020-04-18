@@ -5,7 +5,7 @@ const env = process.env.NODE_ENV || dev;
 const dev = {
     name: 'dev',
     app: {
-        port: 9000
+        port: process.env.PORT || 9000
     },
     db: {
         name: 'todo-dev',
@@ -19,7 +19,7 @@ const dev = {
 const test = {
     name: 'test',
     app: {
-        port: 9000
+        port: process.env.PORT || 9000
     },
     db: {
         name: 'todo-test',
@@ -33,7 +33,7 @@ const test = {
 const prod = {
     name: 'prod',
     app: {
-        port: 9000
+        port: process.env.PORT || 9000
     },
     db: {
         name: 'todo',
