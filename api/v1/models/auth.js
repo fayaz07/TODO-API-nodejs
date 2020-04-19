@@ -8,17 +8,13 @@ const userSchema = new mongoose.Schema({
         min: 5,
         unique: true,
     },
-    /*
-        // removing this field as timestamps is set to true,
-        // createdAt will be used
-        created_on: {
-            type: Date,
-            default: Date.now,
-        },
-    */
+    provider: String,
+    refresh_token: {
+        type: String
+    },
     additional_data: {
         type: Map
     }
 }, { timestamps: true })
 
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('auth', userSchema);
