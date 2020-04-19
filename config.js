@@ -50,10 +50,19 @@ const config = {
     prod
 };
 
-function getConnectionString(env) {
+function _checkIfEnvIsValid(env) {
     if (!env || !env.db || !env.db.host || !env.db.name) {
+        return false;
+    }
+    return true;
+}
+
+function getConnectionString(env) {
+
+    if (!_checkIfEnvIsValid(env)) {
         throw "Passed invalid environment";
     }
+
     // for hosts without a port
     // atlas clusters will not provide a port
     // only localhost will have a port
@@ -71,5 +80,5 @@ function getConnectionString(env) {
     }
 }
 
-module.exports = config[env] || config[dev];
+module.exports = config[env] || config['dev'];
 module.exports.dbConn = getConnectionString;
