@@ -6,3 +6,6 @@ node_modules
 
 # removing config file
 #config.js
+
+# removing keys
+keys/

@@ -15,13 +15,29 @@ router.get('/', verify_token, async(req, res) => {
         }
         const usage = await ApiUsage.findOne({ user_id: auth._id }, { keys: 0 });
         if (!usage) {
-            return res.status(404).json({ status: 'failed', message: 'Usage statistics are null' });
+            const newUsage = ApiUsage({
+                user_id: auth._id,
+            });
+            await newUsage.save();
+            return res.status(200).json({
+                status: 'success',
+                message: 'Successfully fetched api usage details',
+                usage: newUsage
+            });
         }
-        return res.status(200).json({ status: 'success', message: 'Successfully fetched api usage details for user', usage: usage });
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully fetched api usage details for user',
+            usage: usage
+        });
     } catch (err) {
         console.log('Unable to fetch api usage details of user');
         console.log(err);
-        return res.status(500).json({ status: 'failed', message: 'Internal server error', error: err });
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal server error',
+            error: err
+        });
     }
 
 });

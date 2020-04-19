@@ -50,6 +50,33 @@ paths:
         - JWT: []      
     x-swagger-router-controller: REGISTER
 
+  /auth/google:
+    post:
+      tags:
+        - auth
+      description: Consumes id-token and sends an user details to the end-user
+      operationId: google-signin
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema: 
+            example: 
+              id_token: "<token here>"
+              
+      responses:
+        "200":
+          description: Successfully loggedin using Google.        
+        "201":
+          description: Successfully registered using Google.
+        "400":
+          description: Bad request, caused by passing invalid/null values for email and password field.
+        "500":
+          description: Internal server error.  
+      security:
+        - JWT: []      
+    x-swagger-router-controller: REGISTER    
+
 
   /usage:
     get:

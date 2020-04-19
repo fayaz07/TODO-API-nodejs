@@ -1,12 +1,154 @@
 const router = require('express').Router();
 const userValidation = require('../validators/auth').userValidation;
-const User = require('../models/auth');
+const Auth = require('../models/auth');
 const ApiUsage = require('../models/api_usage');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const sendEmail = require('../utils/email/send_email').sendAPIKeyThroughEmail;
 require('dotenv').config();
+const jwt = require('../core/jwt');
+const JWTHandler = new jwt();
+const https = require('https');
+const User = require('../models/user');
 
+// ---------------------------------- start google auth ------------------------------------------
+router.post('/google', async(req, res) => {
+    try {
+        if (!req.body.id_token)
+            return res.status(400).json({ status: 'failed', message: 'Invalid id token' });
+
+        https.get(`https://oauth2.googleapis.com/tokeninfo?id_token=${req.body.id_token}`,
+            (resp) => {
+                var arr = [];
+                resp.on('data', d => {
+                    arr.push(d)
+                }).on('end', async() => {
+                    const buffer = Buffer.concat(arr);
+                    const data = JSON.parse(buffer.toString('utf-8'));
+                    // console.log(data);
+
+                    if (data.error) {
+                        return res.status(400)
+                            .json({
+                                status: 'failed',
+                                message: `Failed to authenticate using Google ${data.error_description}`
+                            });
+                    } else {
+                        // proper access token detected
+                        // checking if user already exists
+                        const authData = await Auth.findOne({ email: data.email });
+                        if (authData) {
+                            // existing user
+                            _loginWithGoogle(authData, data, res);
+                        } else {
+                            // signing up user 
+                            _registerWithGoogle(data, res);
+                        }
+                    }
+                })
+            }
+        );
+    } catch (err) {
+        console.log('Unable to authenticate using Google')
+        console.log(err);
+        return res.status(500)
+            .json({
+                status: 'failed',
+                message: 'Internal server error',
+                error: err
+            });
+    }
+})
+
+async function _loginWithGoogle(authData, data, res) {
+    try {
+        // checking if the email used is with fb auth otherwise throwing error
+        if (authData.provider.includes("email")) {
+            // if used with other type of signin return error
+            return res.status(409).json({
+                status: 'failed',
+                message: 'This email is already being used with other type of signin'
+            });
+        } else {
+            // email used here is not used for other signin type
+            // no issues now, create access token and login the user
+            // Create and assign a token
+            // logging in user
+            const refresh_token = await JWTHandler.genRefreshToken(authData._id);
+            const auth_token = await JWTHandler.genAccessToken(data.email);
+            authData.refresh_token = refresh_token;
+
+            const userData = User.findOne({ email: data.email });
+
+            Promise.all([
+                    userData
+                ])
+                .then(d => {
+                    return res
+                        .header('access-token', auth_token)
+                        .header('refresh-token', refresh_token)
+                        .status(200)
+                        .json({
+                            status: 'success',
+                            message: 'Successfully logged in with Google',
+                            user: d[0],
+                        });
+                })
+        }
+    } catch (err) {
+        console.log('Failed to login user using Google');
+        throw err;
+    }
+}
+
+async function _registerWithGoogle(data, res) {
+    try {
+        const authData = new Auth({
+            email: data.email,
+            provider: 'google'
+        });
+
+        const refresh_token = await JWTHandler.genRefreshToken(authData._id);
+        const auth_token = await JWTHandler.genAccessToken(data.email);
+        authData.refresh_token = refresh_token;
+
+        var names = [];
+        if (data.name) {
+            names = data.name.split(/\s+/);
+            //            console.log(names);
+        }
+
+        const userData = new User({
+            user_id: authData._id,
+            email: data.email,
+            first_name: names[0],
+            last_name: names[1],
+            pp: data.picture,
+        });
+
+        // Creating user in database
+        Promise.all([
+            authData.save(),
+            userData.save()
+        ]).then(d => {
+            return res
+                .header('access-token', auth_token)
+                .header('refresh-token', refresh_token)
+                .status(201)
+                .json({
+                    status: 'success',
+                    message: 'Successfully registered using Google',
+                    user: userData,
+                });
+        });
+    } catch (err) {
+        console.log('Failed to register user using Google');
+        throw err;
+    }
+}
+// ---------------------------------- end google auth ---------------------------------------------
+
+
+
+// -------------------------------- start email login ---------------------------------------------
 router.post('/login', async(req, res) => {
     try {
         // validating if required details are provided by the user
@@ -36,7 +178,7 @@ router.post('/login', async(req, res) => {
         //console.log('email validated and is ok')
 
         // check if the user is existing
-        const existing = await User.findOne({ email: req.body.email });
+        const existing = await Auth.findOne({ email: req.body.email });
         let result;
         if (existing && existing.email) {
             //console.log('existing user')
@@ -88,9 +230,9 @@ async function _login(existing) {
                 // send the key to the end user through email
                 try {
                     if (lastKey) {
-                        const verified = _validateAPIKey(lastKey);
+                        const verified = await JWTHandler.verifyAccessToken(lastKey);
                         // console.log(verified);
-                        if (verified.email === null) {
+                        if (!verified.valid) {
                             //console.log('Malformed token');
                             // creating a new token and saving it in db
                             apiUsage = await _genAPIKeyAndSaveInDB(apiUsage);
@@ -137,30 +279,10 @@ async function _login(existing) {
     }
 }
 
-function _pickLastKeyAndSendEmail(email, apiUsage) {
-    try {
-        const lastKey = apiUsage.keys[apiUsage.keys.length - 1];
-        // sending email
-        sendEmail(email, lastKey);
-    } catch (err) {
-        console.log('Caught an exception while picking the last key and sending email to the end user');
-        console.log(err);
-    }
-}
-
-async function _createEmailHash(email) {
-    const salt = await bcrypt.genSalt(10);
-    const hashEmail = await bcrypt.hash(email, salt);
-    return hashEmail;
-}
-
 async function _genAPIKeyAndSaveInDB(email, apiUsage) {
     try {
-
-        // creating hash of the email
-        // const hashedEmail = await _createEmailHash(email);
         // generating api key and saving in db
-        const newAPIKey = await _generateNewAPIKey(email);
+        const newAPIKey = await JWTHandler.genAccessToken(email);
         // console.log(newAPIKey);
         apiUsage.keys.push(newAPIKey);
         await apiUsage.save();
@@ -171,17 +293,6 @@ async function _genAPIKeyAndSaveInDB(email, apiUsage) {
     }
 }
 
-function _validateAPIKey(token) {
-    // console.log(token);
-    return jwt.verify(token, process.env.AUTH_TOKEN_SECRET);
-}
-
-async function _generateNewAPIKey(hashedEmail) {
-    // creating an api key that expires in 30 days
-    const apiKey = await jwt.sign({ email: hashedEmail }, process.env.AUTH_TOKEN_SECRET, { expiresIn: '30d' });
-    return apiKey;
-}
-
 // email
 async function _register(email) {
     // register
@@ -189,8 +300,9 @@ async function _register(email) {
         // All good, email looks ok, now proceeding to next step
         // Hash the email
 
-        const newUser = User({
-            email: email
+        const newUser = Auth({
+            email: email,
+            provider: 'email'
         });
         // saving user
         await newUser.save();
@@ -211,5 +323,26 @@ async function _register(email) {
     }
 
 }
+// ----------------------------------------- end email auth ---------------------------------------
+
+
+
+// ----------------------------------------- helper methods ----------------------------------------
+function _pickLastKeyAndSendEmail(email, apiUsage) {
+    try {
+        const lastKey = apiUsage.keys[apiUsage.keys.length - 1];
+        // sending email
+        sendEmail(email, lastKey);
+    } catch (err) {
+        console.log('Caught an exception while picking the last key and sending email to the end user');
+        console.log(err);
+    }
+}
+
+async function _encryptData(data) {
+    const salt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(data, salt);
+}
+// --------------------------------------- end helper methods --------------------------------------
 
 module.exports = router;
