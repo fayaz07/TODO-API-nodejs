@@ -12,40 +12,13 @@ const User = require('../models/user');
 // ---------------------------------- start google auth ------------------------------------------
 router.post('/google', async(req, res) => {
     try {
+        // invalid token
         if (!req.body.id_token)
-            return res.status(400).json({ status: 'failed', message: 'Invalid id token' });
-
-        https.get(`https://oauth2.googleapis.com/tokeninfo?id_token=${req.body.id_token}`,
-            (resp) => {
-                var arr = [];
-                resp.on('data', d => {
-                    arr.push(d)
-                }).on('end', async() => {
-                    const buffer = Buffer.concat(arr);
-                    const data = JSON.parse(buffer.toString('utf-8'));
-                    // console.log(data);
-
-                    if (data.error) {
-                        return res.status(400)
-                            .json({
-                                status: 'failed',
-                                message: `Failed to authenticate using Google ${data.error_description}`
-                            });
-                    } else {
-                        // proper access token detected
-                        // checking if user already exists
-                        const authData = await Auth.findOne({ email: data.email });
-                        if (authData) {
-                            // existing user
-                            _loginWithGoogle(authData, data, res);
-                        } else {
-                            // signing up user 
-                            _registerWithGoogle(data, res);
-                        }
-                    }
-                })
-            }
-        );
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Invalid id token'
+            });
+        _validateGoogleIdToken(req, res);
     } catch (err) {
         console.log('Unable to authenticate using Google')
         console.log(err);
@@ -58,7 +31,54 @@ router.post('/google', async(req, res) => {
     }
 })
 
-async function _loginWithGoogle(authData, data, res) {
+async function _validateGoogleIdToken(req, res) {
+    try {
+        https.get(`https://oauth2.googleapis.com/tokeninfo?id_token=${req.body.id_token}`,
+            (resp) => {
+                var arr = [];
+                resp.on('data', d => {
+                    arr.push(d)
+                }).on('end', async() => {
+                    const buffer = Buffer.concat(arr);
+                    const response = JSON.parse(buffer.toString('utf-8'));
+                    // console.log(response);
+                    _checkForUsersExistence(response, res);
+                })
+            }
+        );
+    } catch (err) {
+        console.log('Unable to validate google id token');
+        throw err;
+    }
+}
+
+async function _checkForUsersExistence(googleAuthResposne, res) {
+    try {
+        if (googleAuthResposne.error) {
+            return res.status(400)
+                .json({
+                    status: 'failed',
+                    message: `Failed to authenticate using Google ${googleAuthResposne.error_description}`
+                });
+        } else {
+            // proper access token detected
+            // checking if user already exists
+            const authData = await Auth.findOne({ email: googleAuthResposne.email });
+            if (authData) {
+                // existing user
+                _loginWithGoogle(authData, googleAuthResposne, res);
+            } else {
+                // signing up user 
+                _registerWithGoogle(googleAuthResposne, res);
+            }
+        }
+    } catch (err) {
+        console.log('Unable to check users existance - Google auth id');
+        throw err;
+    }
+}
+
+async function _loginWithGoogle(authData, response, res) {
     try {
         // checking if the email used is with fb auth otherwise throwing error
         if (authData.provider.includes("email")) {
@@ -73,10 +93,10 @@ async function _loginWithGoogle(authData, data, res) {
             // Create and assign a token
             // logging in user
             const refresh_token = await JWTHandler.genRefreshToken(authData._id);
-            const auth_token = await JWTHandler.genAccessToken(data.email);
+            const auth_token = await JWTHandler.genAccessToken(response.email);
             authData.refresh_token = refresh_token;
 
-            const userData = User.findOne({ email: data.email });
+            const userData = User.findOne({ email: response.email });
 
             Promise.all([
                     userData
@@ -99,29 +119,29 @@ async function _loginWithGoogle(authData, data, res) {
     }
 }
 
-async function _registerWithGoogle(data, res) {
+async function _registerWithGoogle(response, res) {
     try {
         const authData = new Auth({
-            email: data.email,
+            email: response.email,
             provider: 'google'
         });
 
         const refresh_token = await JWTHandler.genRefreshToken(authData._id);
-        const auth_token = await JWTHandler.genAccessToken(data.email);
+        const auth_token = await JWTHandler.genAccessToken(response.email);
         authData.refresh_token = refresh_token;
 
         var names = [];
-        if (data.name) {
-            names = data.name.split(/\s+/);
+        if (response.name) {
+            names = response.name.split(/\s+/);
             //            console.log(names);
         }
 
         const userData = new User({
             user_id: authData._id,
-            email: data.email,
+            email: response.email,
             first_name: names[0],
             last_name: names[1],
-            pp: data.picture,
+            pp: response.picture,
         });
 
         // Creating user in database
