@@ -35,7 +35,7 @@ app.use('/api/v1/usage', apiUsageRoute);
 app.use('/api/v1/todo', todoRoute);
 
 
-// 404
+// handling 404 routes
 app.use(function(req, res, next) {
     res.status(404);
 
