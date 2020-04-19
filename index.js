@@ -55,6 +55,9 @@ app.use(function(req, res, next) {
     res.type('txt').send('Not found');
 });
 
+require('./api/v1/core/jwt');
+
+
 _connectToDB();
 
 // connecting to db
