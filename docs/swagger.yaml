@@ -84,8 +84,8 @@ paths:
       description: Consumes refresh-token and creates a new access-token 
       operationId: new-access-token
       parameters:
-        - name: body
-          in: body
+        - name: header
+          in: header
           required: true
           schema: 
             example: 
