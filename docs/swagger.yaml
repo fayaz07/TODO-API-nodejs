@@ -77,6 +77,30 @@ paths:
         - JWT: []      
     x-swagger-router-controller: REGISTER    
 
+  /auth/token:
+    post:
+      tags:
+        - auth
+      description: Consumes refresh-token and creates a new access-token 
+      operationId: new-access-token
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema: 
+            example: 
+              refresh-token: "<token here>"
+              
+      responses:
+        "200":
+          description: Successfully created new access token  
+        "400":
+          description: Bad request, caused by passing invalid/null values for token.
+        "500":
+          description: Internal server error.  
+      security:
+        - JWT: []      
+    x-swagger-router-controller: REGISTER    
 
   /usage:
     get:
