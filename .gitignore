@@ -8,4 +8,4 @@ node_modules
 #config.js
 
 # removing keys
-keys/
+#keys/

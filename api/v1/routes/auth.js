@@ -96,6 +96,8 @@ async function _loginWithGoogle(authData, response, res) {
             const auth_token = await JWTHandler.genAccessToken(response.email);
             authData.refresh_token = refresh_token;
 
+            authData.save();
+
             const userData = User.findOne({ email: response.email });
 
             Promise.all([
@@ -166,6 +168,48 @@ async function _registerWithGoogle(response, res) {
 }
 // ---------------------------------- end google auth ---------------------------------------------
 
+
+
+// ---------------------------------- start token -------------------------------------------------
+
+router.post('/token', async(req, res) => {
+
+    try {
+        const refresh_token = req.header('refresh-token');
+
+        if (!refresh_token) {
+            res.status(400).json({ status: 'failed', message: 'Invalid refresh-token' });
+            return;
+        }
+
+        // verifying refresh-token
+        const verify = await JWTHandler.verifyRefreshToken(refresh_token);
+        // console.log(verify);
+        if (!verify.valid) {
+            return res.status(400).json({ status: 'failed', message: 'Invalid/tampered refresh-token' });
+        }
+        const authUser = await Auth.findOne({ _id: verify.data.user_id });
+        if (authUser.refresh_token === refresh_token) {
+            const accessToken = await JWTHandler.genAccessToken(authUser.email);
+            return res.header('access-token', accessToken)
+                .header('refresh-token', refresh_token)
+                .status(200)
+                .json({ status: 'success', message: 'Auth-token regenerated' });
+        } else {
+            console.log(authUser.refresh_token);
+            console.log(refresh_token);
+            res.status(400).json({ status: 'failed', message: 'Tokens doesn\'t match' });
+            return;
+        }
+    } catch (err) {
+        console.log('Unable to generate auth-token');
+        console.log(err);
+        return res.status(500).json({ status: 'failed', message: 'Internal server error' });
+    }
+
+});
+
+// ---------------------------------- end token ---------------------------------------------------
 
 
 // -------------------------------- start email login ---------------------------------------------
