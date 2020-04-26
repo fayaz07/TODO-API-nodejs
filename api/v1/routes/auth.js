@@ -168,6 +168,46 @@ async function _registerWithGoogle(response, res) {
 
 
 
+// ---------------------------------- start token -------------------------------------------------
+
+router.post('/token', async(req, res) => {
+
+    try {
+        const refresh_token = req.header('refresh-token');
+
+        if (!refresh_token) {
+            res.status(400).json({ status: 'failed', message: 'Invalid refresh-token' });
+            return;
+        }
+
+        // verifying refresh-token
+        const verify = await JWTHandler.verifyRefreshToken(refresh_token);
+        if (verify.valid && verify.data.user_id == null) {
+            res.status(400).json({ status: 'failed', message: 'Invalid/tampered refresh-token' });
+            return;
+        }
+        const authUser = await Auth.findOne({ _id: verify.data.user_id });
+        if (authUser.refresh_token === refresh_token) {
+            const accessToken = await JWTHandler.genAccessToken(authUser.email);
+            return res.header('access-token', accessToken)
+                .header('refresh-token', refresh_token)
+                .status(200)
+                .json({ status: 'success', message: 'Auth-token regenerated' });
+        } else {
+            res.status(400).json({ status: 'failed', message: 'Invalid/tampered refresh-token' });
+            return;
+        }
+    } catch (err) {
+        console.log('Unable to generate auth-token');
+        console.log(err);
+        return res.status(500).json({ status: 'failed', message: 'Internal server error' });
+    }
+
+});
+
+// ---------------------------------- end token ---------------------------------------------------
+
+
 // -------------------------------- start email login ---------------------------------------------
 router.post('/login', async(req, res) => {
     try {
