@@ -35,7 +35,58 @@ Ex:
 ```bash
 export PATH=/usr/local/node-v12.16.2-linux-x64/bin:$PATH
 ```
-  
+
+### Install nodejs from command line
+
+1. Update the dependencies
+```bash
+sudo apt update
+```
+
+2. Install ```nodejs```
+```bash
+sudo apt install nodejs
+```
+
+3. Install ```npm```
+```bash
+sudo apt install npm
+``` 
+
+### Install specific version using CURL
+
+1. Install ```curl```
+```bash
+sudo apt update
+sudo apt upgrade
+sudo apt install curl
+```
+2. Get ```nodejs``` PPA
+Switch to root directory
+```bash
+cd ~
+```
+
+```bash
+curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
+```
+
+3. Run the script under sudo:
+```bash
+sudo bash nodesource_setup.sh
+```
+
+4. Install nodejs
+```bash
+sudo apt install nodejs
+```
+
+5. In order for some npm packages to work (those that require compiling code from source, for example), you will need to install the build-essential package:
+```bash
+sudo apt install build-essential
+```
+
+
 <!-- 
 (#mongodb-installation-configuration)
 -->
