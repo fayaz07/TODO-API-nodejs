@@ -96,6 +96,8 @@ async function _loginWithGoogle(authData, response, res) {
             const auth_token = await JWTHandler.genAccessToken(response.email);
             authData.refresh_token = refresh_token;
 
+            authData.save();
+
             const userData = User.findOne({ email: response.email });
 
             Promise.all([
@@ -182,9 +184,9 @@ router.post('/token', async(req, res) => {
 
         // verifying refresh-token
         const verify = await JWTHandler.verifyRefreshToken(refresh_token);
-        if (verify.valid && verify.data.user_id == null) {
-            res.status(400).json({ status: 'failed', message: 'Invalid/tampered refresh-token' });
-            return;
+        // console.log(verify);
+        if (!verify.valid) {
+            return res.status(400).json({ status: 'failed', message: 'Invalid/tampered refresh-token' });
         }
         const authUser = await Auth.findOne({ _id: verify.data.user_id });
         if (authUser.refresh_token === refresh_token) {
@@ -194,7 +196,9 @@ router.post('/token', async(req, res) => {
                 .status(200)
                 .json({ status: 'success', message: 'Auth-token regenerated' });
         } else {
-            res.status(400).json({ status: 'failed', message: 'Invalid/tampered refresh-token' });
+            console.log(authUser.refresh_token);
+            console.log(refresh_token);
+            res.status(400).json({ status: 'failed', message: 'Tokens doesn\'t match' });
             return;
         }
     } catch (err) {
