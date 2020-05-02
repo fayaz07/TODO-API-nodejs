@@ -33,6 +33,7 @@ router.post('/google', async(req, res) => {
 
 async function _validateGoogleIdToken(req, res) {
     try {
+        //        console.log(req.body.id_token);
         https.get(`https://oauth2.googleapis.com/tokeninfo?id_token=${req.body.id_token}`,
             (resp) => {
                 var arr = [];
@@ -41,7 +42,7 @@ async function _validateGoogleIdToken(req, res) {
                 }).on('end', async() => {
                     const buffer = Buffer.concat(arr);
                     const response = JSON.parse(buffer.toString('utf-8'));
-                    // console.log(response);
+                    //console.log(response);
                     _checkForUsersExistence(response, res);
                 })
             }
