@@ -248,12 +248,31 @@ For more info on openssl, click [here](https://www.openssl.org/)
 
 3. Setup environment variables
 Rename the ```.env.example``` as ```.env``` and fill up your details there. 
+
 #### SendGrid
 Create an account at SendGrid [SendGrid](https://sendgrid.com/). 
 Create a new API Key [here](https://app.sendgrid.com/settings/api_keys)
 Verify a sender email and use that email in the ```.env``` file, to verify click [here](https://app.sendgrid.com/settings/sender_auth/senders/new)
 
-4. Rename ```config.js.example``` file as ```config.js``` and setup the port, mongodb database name and credentials if any in ```config.js``` file.
+
+4. Place your application's Database credentials inside the ```.env``` file, then inside the ```config.js``` file, setup db-names just like ```todo-test, todo-dev, todo-prod```.
+
+Refer below config as example:
+```js
+const prod = {
+    name: 'prod', // name of the environment
+    app: {
+        port: process.env.PORT || 9000 // this will be the port where app will listen
+    },
+    db: {
+        name: 'todo', // db name
+        host: process.env.DB_HOST, // db host
+        port: process.env.DB_PORT, // db port, in case you are running in localhost, default port will be: 27017 
+        username: process.env.DB_USERNAME, // db username
+        password: process.env.DB_PASSWORD // db password
+    }
+};
+```
 
 5. Run the project with nodemon
 
