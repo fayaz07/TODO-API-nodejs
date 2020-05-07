@@ -28,14 +28,28 @@ class JWTHandler {
         if (!this._privateKey) {
             this._privateKey = await fs.readFile(path.join(__dirname, '../../../keys/private.pem'), 'utf8');
         }
-        return await this._genJWT(this._payloadAccessToken(email), this._privateKey, '1d');
+        // expires after 1 day
+        // return await this._genJWT(this._payloadAccessToken(email), this._privateKey, '1d');
+
+        // fetch expiry time from .env
+        // return await this._genJWT(this._payloadAccessToken(email), this._privateKey, process.env.ACCESS_TOKEN_EXPIRES);
+
+        // never expires
+        return await this._genJWT(this._payloadAccessToken(email), this._privateKey);
     }
 
     async genRefreshToken(user_id) {
         if (!this._RprivateKey) {
             this._RprivateKey = fs.readFileSync(path.join(__dirname, '../../../keys/privater.pem'), 'utf8')
         }
-        return await this._genJWT(this._payloadRefreshToken(user_id), this._RprivateKey, '30d');
+        // expires after 30 days
+        // return await this._genJWT(this._payloadRefreshToken(user_id), this._RprivateKey, '30d');
+
+        // fetch expiry time from .env
+        // return await this._genJWT(this._payloadRefreshToken(user_id), this._RprivateKey, process.env.REFRESH_TOKEN_EXPIRES);
+
+        // never expires
+        return await this._genJWT(this._payloadRefreshToken(user_id), this._RprivateKey);
     }
 
     verifyAccessToken(token) {

@@ -13,49 +13,52 @@ const authRoute = require('./api/v1/routes/auth');
 const apiUsageRoute = require('./api/v1/routes/api_usage');
 const todoRoute = require('./api/v1/routes/todo');
 
-// body parser
-app.use(express.json());
-
-app.use(express.static(__dirname + '/docs'));
-
-// logging requests to console
-app.use((req, res, next) => {
-    console.log(`Request: ${req.method} ${req.url} - ${new Date().toString()}`);
-    next();
-});
-
-// setting routes----------------------------------
-// user auth route
-app.use('/api/v1/auth', authRoute);
-
-// api usage route
-app.use('/api/v1/usage', apiUsageRoute);
-
-// todo route
-app.use('/api/v1/todo', todoRoute);
-
-
-// handling 404 routes
-app.use(function(req, res, next) {
-    res.status(404);
-
-    // respond with html page
-    if (req.accepts('html')) {
-        res.send('<h2> 404 Not found</h2>');
-        return;
-    }
-
-    // respond with json
-    if (req.accepts('json')) {
-        res.send({ error: 'Not found' });
-        return;
-    }
-
-    // default to plain-text. send()
-    res.type('txt').send('Not found');
-});
+_setupExpressAndAPIv1();
 
 _connectToDB();
+
+function _setupExpressAndAPIv1() {
+    // body parser
+    app.use(express.json());
+
+    app.use(express.static(__dirname + '/docs'));
+
+    // logging requests to console
+    app.use((req, res, next) => {
+        console.log(`Request: ${req.method} ${req.url} - ${new Date().toString()}`);
+        next();
+    });
+
+    // setting routes----------------------------------
+    // user auth route
+    app.use('/api/v1/auth', authRoute);
+
+    // api usage route
+    app.use('/api/v1/usage', apiUsageRoute);
+
+    // todo route
+    app.use('/api/v1/todo', todoRoute);
+
+    // handling 404 routes
+    app.use(function(req, res, next) {
+        res.status(404);
+
+        // respond with html page
+        if (req.accepts('html')) {
+            res.send('<h2> 404 Not found</h2>');
+            return;
+        }
+
+        // respond with json
+        if (req.accepts('json')) {
+            res.send({ error: 'Not found' });
+            return;
+        }
+
+        // default to plain-text. send()
+        res.type('txt').send('Not found');
+    });
+}
 
 // connecting to db
 function _connectToDB() {
