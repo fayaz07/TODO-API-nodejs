@@ -109,7 +109,7 @@ paths:
       description: Returns the api usage details
       operationId: get-api-usage
       parameters:
-        - name: auth-token
+        - name: access-token
           in: header
           required: true
           schema: 
@@ -134,7 +134,7 @@ paths:
       description: Returns all todos
       operationId: get-all-todos
       parameters:
-        - name: auth-token
+        - name: access-token
           in: header
           required: true
           schema: 
@@ -158,7 +158,7 @@ paths:
       description: Created todo
       operationId: create-todo
       parameters:
-        - name: auth-token
+        - name: access-token
           in: header
           required: true
           schema: 
@@ -191,7 +191,7 @@ paths:
       description: Update todo
       operationId: update-todo
       parameters:
-        - name: auth-token
+        - name: access-token
           in: header
           required: true
           schema: 
@@ -226,7 +226,7 @@ paths:
       description: Returns all pending todos
       operationId: get-all-pending-todos
       parameters:
-        - name: auth-token
+        - name: access-token
           in: header
           required: true
           schema: 
@@ -251,7 +251,7 @@ paths:
       description: Returns all completed todos
       operationId: get-all-completed-todos
       parameters:
-        - name: auth-token
+        - name: access-token
           in: header
           required: true
           schema: 
@@ -278,7 +278,7 @@ paths:
       description: Mark a todo as completed
       operationId: complete-todo
       parameters:
-        - name: auth-token
+        - name: access-token
           in: header
           required: true
           schema: 
@@ -309,7 +309,7 @@ paths:
       description: Remove a todo
       operationId: remove-todo
       parameters:
-        - name: auth-token
+        - name: access-token
           in: header
           required: true
           schema: 

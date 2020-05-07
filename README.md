@@ -1,5 +1,6 @@
-<img  src="https://i.morioh.com/1f14860de0.png">
-Image Source: Internet
+
+<img  src="screenshots/cover-pic.jpg">
+<br/>
 
 # Todo app API with Node.js, Express.js and Mongodb
 
@@ -11,32 +12,11 @@ Image Source: Internet
 <!--
 (#installation-of-nodejs)
 -->
-### Installation of Node.js
----
-First thing we need to do is to install **nodejs**, you can find the installation steps and archives from the official website [here](https://nodejs.org/en/). It is recommended to use the LTS version of node to avoid any kind of interruptions.  
+## Installation of Node.js
 
-Get the installation package or archive from the official website [here](https://nodejs.org/dist/v12.16.2/)
+First thing we need to do is to install **nodejs**, you can find the installation steps and archives from the official website [here](https://nodejs.org/en/). It is recommended to use the LTS version of node to avoid any kind of interruptions. 
 
-If you have downloaded the ubuntu-archive, then you might set the path. Open up your terminal and edit ```.bashrc``` file and add the below line at the end of the file.
-
-```bash
-gedit .bashrc
-```
-> Note: .bashrc will be located at your home directory
-  
-
-The above command will open up text-editor with ```.bashrc``` file, add the following line by replacing the path with path of your ```nodejs``` installation directory.
-
-```bash
-export PATH=<NODEJS-INSTALLATION-PATH>/bin:$PATH
-```
-
-Ex:
-```bash
-export PATH=/usr/local/node-v12.16.2-linux-x64/bin:$PATH
-```
-
-### Install nodejs from command line
+#### Install nodejs from command line (for linux)
 
 1. Update the dependencies
 ```bash
@@ -53,7 +33,7 @@ sudo apt install nodejs
 sudo apt install npm
 ``` 
 
-### Install specific version using CURL
+#### Install specific version using CURL
 
 1. Install ```curl```
 ```bash
@@ -86,17 +66,41 @@ sudo apt install nodejs
 sudo apt install build-essential
 ```
 
+#### Install Node.js using executable or installer package
+
+1. Get the installation package or archive from the official website [here](https://nodejs.org/dist/v12.16.2/)
+
+2. If you have downloaded the ubuntu-archive, then you might set the path. Open up your terminal and edit ```.bashrc``` file and add the below line at the end of the file.
+
+```bash
+gedit .bashrc
+```
+> Note: .bashrc will be located at your home directory
+
+3. The above command will open up text-editor with ```.bashrc``` file, add the following line by replacing the path with path of your ```nodejs``` installation directory.
+
+```bash
+export PATH=<NODEJS-INSTALLATION-PATH>/bin:$PATH
+```
+
+Ex:
+```bash
+export PATH=/usr/local/node-v12.16.2-linux-x64/bin:$PATH
+```
+
+---
+
 
 <!-- 
 (#mongodb-installation-configuration)
 -->
-#### Mongodb installation and configuration
+## Mongodb installation and configuration
 
 In case you face any issues, refer official [docs](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)
 
   
 
-**Installing mongodb v4.2**
+#### Installing mongodb v4.2
 
 a. Import the public key used by the package management system.
 
@@ -132,7 +136,7 @@ echo  "mongodb-org-tools hold" | sudo dpkg --set-selections
 
   
 
-**Configure mongodb**
+#### Configure mongodb
 
   
 
@@ -151,7 +155,7 @@ sudo chown -R `id -un` /data/db
 
   
 
-**Start mongodb services**
+#### Start mongodb services
 
 ```bash
 # start mongodb service
@@ -162,7 +166,7 @@ sudo service mongod status
 
   
 
-**Initialize MongoDB**
+#### Initialize MongoDB
 
 ```bash
 sudo mongod
@@ -176,7 +180,7 @@ mongodb://localhost:27017/
 
   
 
-**MongoDB shell**
+#### MongoDB shell
 
 Here you can execute your db queries. Initialize the shell by following command
 
@@ -192,17 +196,10 @@ mongo
 (#setup-and-run-the-project)
 -->
 
-### Setup and run the project
----
-
-  
-
+## Setup and run the project  
 1. Install the required dependencies by the following command
-
 ```bash
-
 npm install
-
 ```
 2. Setup public & private keys for ```Access``` and ```Refresh``` tokens
 Open your terminal and type the below commands to create secure private key and extracting public key from the private key.

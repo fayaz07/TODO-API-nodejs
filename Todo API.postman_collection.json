@@ -1,0 +1,438 @@
+{
+	"info": {
+		"_postman_id": "88d7d8a7-e33b-488c-9790-8b69ac3453de",
+		"name": "Todo API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register/login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"fayaz.edc@gmail.com\"\n}"
+						},
+						"url": {
+							"raw": "https://todo-7.herokuapp.com/api/v1/auth/login",
+							"protocol": "https",
+							"host": [
+								"todo-7",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "google auth",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id_token\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjI4Yjc0MWU4ZGU5ODRhNDcxNTlmMTllNmQ3NzgzZTlkNGZhODEwZGIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2ODMyODMxMTI1MC1na3ZzOGE3Z2tvMHFzMXFyaHZvZTZ0N2NhcjU5bmIxMi5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjY4MzI4MzExMjUwLXMybDFvdWcxbDQwbXE3bmIyM2M1bHZjZmw0Z2FhbnNxLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTAyNjQxNjQ2ODk4ODU3NjQ0MzQxIiwiZW1haWwiOiJwcnVkaHZpcmVkZHkubTAxQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoicHJ1ZGh2aSByZWRkeSIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS0vQU9oMTRHaFpST2lHNjV3M3ZRXzFYSF9QTk5Kc3pEem5LLUVUVGctUjUyZnl6QT1zOTYtYyIsImdpdmVuX25hbWUiOiJwcnVkaHZpIiwiZmFtaWx5X25hbWUiOiJyZWRkeSIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNTg4NDE4NDA0LCJleHAiOjE1ODg0MjIwMDR9.mteDWRzTjBvJnNoYtXrpLT9lHI6DHUps5aEXtvN72LH6uM-BlVcGFs2V03uZ9JpjXXHUcFntayc0BzB_xQGJVeacDWdP5FYWovZjpuparhTkmm8CxWUBv9dBcTDFAe27z0JIMovEAH_quuzmxp1msCcivDNxqITUmgRC41RGYncp-DLSmNubEoqmIbBXQGtbknEfbrfGs6px_w-NKQ6S5Fv_02u5PzbXRGOOOJ8sL9NX9MRZ7cWdFMBAwioScXbes6BBrNyjW6TMR7Qw-5sWGCT1SQ5D0hzaBe8J7j8L5vLezSMhvrWVYmUXQCk6TvboiquIQrSCClds0e-TA-ZjyQ\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://todo-7.herokuapp.com/api/v1/auth/google",
+							"protocol": "https",
+							"host": [
+								"todo-7",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"google"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "refresh-token",
+								"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1bmRlZmluZWRfUmVmcmVzaFRva2VuIiwidXNlcl9pZCI6IjVlOWMxMTIzMDk2OTZjMzJjMWE3YjUwYiIsImlhdCI6MTU4Nzg4NTEwNiwiZXhwIjoxNTkwNDc3MTA2fQ.xhwDGzo5ShecuFiO8nzhLbvftkvxZDtSTe6jgiOLuOV0QAZ_xtwT5PjG31ZHQKb8U1pL8QNFQk2ndEjO2jLWROrAsrDQCtGMn64eF3LAbsEKca7exsiq90ei1xNxEDEkUY7PSnvbcj-LrE6ZiPHdTyqC4b21h-KaYNpmHcqYwMhEwMfWS1GKwtU75gcnxUJscIcDRu5PTLCVqd99XpojZ9vgvqPi0nypi8V-n8g9RwZ-CO-kWIQTsu_3w-wHdnW4iPMAsBIoDTrz__hieA1JeIJSl1CE3kZC0BgvRNK5ehLv36AXnyTPgfhnlpQrogeRAfNBgpHiWfbmK_CijIf1rA",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://todo-7.herokuapp.com/api/v1/auth/token",
+							"protocol": "https",
+							"host": [
+								"todo-7",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "usage",
+			"item": [
+				{
+					"name": "get usage",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "access-token",
+								"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ0b2RvYXBwLmNvbSIsInN1YiI6ImFwaV9BY2Nlc3NUb2tlbiIsImlzcyI6InRvZG9hcHAuY29tIiwiZW1haWwiOiJwcnVkaHZpcmVkZHkubTAxQGdtYWlsLmNvbSIsImlhdCI6MTU4ODQxODQ5OSwiZXhwIjoxNTg4NTA0ODk5fQ.a03SigF69iUXjIfB-LxKvOa8uIun5i2i39R_iORceEzveHjCSG-0zziX3oo2quHhVrwwk8MnDruzxLbLkwLBdmIq_omXWnlH6TIwxOcas7cKWE-nHG1-EDCUnZQBD1C9AXnyK-HJ8_OGyEK4u2u-fcPEXHG3y3Grx_G4NtRpOV_cR79Iv6ijVINMBu5mjrM9Y0LvtgFyNHBwA4Q-b26-Px4ntf0OEGYIP2s3en97RJyT8TMrpLLfaXcl6pDjq3Xom3Nats7AE_sHY1ID6WE8qXQisSunBV9DEr03f4O9IbQQNNxQO14QogeFDZKw9sBE0ImtqDf57I59A9Igrl6rtQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://todo-7.herokuapp.com/api/v1/usage",
+							"protocol": "https",
+							"host": [
+								"todo-7",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"usage"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "todo",
+			"item": [
+				{
+					"name": "create todo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "access-token",
+								"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ0b2RvYXBwLmNvbSIsInN1YiI6ImFwaV9BY2Nlc3NUb2tlbiIsImlzcyI6InRvZG9hcHAuY29tIiwiZW1haWwiOiJwcnVkaHZpcmVkZHkubTAxQGdtYWlsLmNvbSIsImlhdCI6MTU4ODQxODQ5OSwiZXhwIjoxNTg4NTA0ODk5fQ.a03SigF69iUXjIfB-LxKvOa8uIun5i2i39R_iORceEzveHjCSG-0zziX3oo2quHhVrwwk8MnDruzxLbLkwLBdmIq_omXWnlH6TIwxOcas7cKWE-nHG1-EDCUnZQBD1C9AXnyK-HJ8_OGyEK4u2u-fcPEXHG3y3Grx_G4NtRpOV_cR79Iv6ijVINMBu5mjrM9Y0LvtgFyNHBwA4Q-b26-Px4ntf0OEGYIP2s3en97RJyT8TMrpLLfaXcl6pDjq3Xom3Nats7AE_sHY1ID6WE8qXQisSunBV9DEr03f4O9IbQQNNxQO14QogeFDZKw9sBE0ImtqDf57I59A9Igrl6rtQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"Turn off laptop\",\n\t\"description\":\"turn off laptop after using it during the night time\",\n\t\"image\":\"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=751&q=80\",\n\t\"due_on\":\"2020-04-15T17:01:32.507Z\"\n}"
+						},
+						"url": {
+							"raw": "https://todo-7.herokuapp.com/api/v1/todo",
+							"protocol": "https",
+							"host": [
+								"todo-7",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"todo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update todo",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZheWF6LmVkY0BnbWFpbC5jb20iLCJpYXQiOjE1ODY5NjI3NjAsImV4cCI6MTU4OTU1NDc2MH0.hGG9G15_zPmS7eyS1naa5qCVWjJ6GTl3ETxwfemBids",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"todo_id\":\"5e9742c3af626d26f1c72d4f\",\n\t\"title\":\"Switch off laptop\",\n\t\"description\":\"turn off laptop after using it during the night time, updated\",\n\t\"image\":\"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=751&q=80\",\n\t\"due_on\":\"2020-04-15T17:01:32.507Z\"\n}"
+						},
+						"url": {
+							"raw": "https://todo-7.herokuapp.com/api/v1/todo",
+							"protocol": "https",
+							"host": [
+								"todo-7",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"todo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "mark as completed",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "access-token",
+								"type": "text",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZheWF6LmVkY0BnbWFpbC5jb20iLCJpYXQiOjE1ODY5NjI3NjAsImV4cCI6MTU4OTU1NDc2MH0.hGG9G15_zPmS7eyS1naa5qCVWjJ6GTl3ETxwfemBids"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"todo_id\":\"5e9742c3af626d26f1c72d4f\"\n}"
+						},
+						"url": {
+							"raw": "https://todo-7.herokuapp.com/api/v1/todo/complete",
+							"protocol": "https",
+							"host": [
+								"todo-7",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"todo",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove todo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "access-token",
+								"type": "text",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZheWF6LmVkY0BnbWFpbC5jb20iLCJpYXQiOjE1ODY5NjI3NjAsImV4cCI6MTU4OTU1NDc2MH0.hGG9G15_zPmS7eyS1naa5qCVWjJ6GTl3ETxwfemBids"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"todo_id\":\"5e9740160f5b2924603d7d16\"\n}"
+						},
+						"url": {
+							"raw": "https://todo-7.herokuapp.com/api/v1/todo/remove",
+							"protocol": "https",
+							"host": [
+								"todo-7",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"todo",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "todos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "access-token",
+								"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ0b2RvYXBwLmNvbSIsInN1YiI6ImFwaV9BY2Nlc3NUb2tlbiIsImlzcyI6InRvZG9hcHAuY29tIiwiZW1haWwiOiJwcnVkaHZpcmVkZHkubTAxQGdtYWlsLmNvbSIsImlhdCI6MTU4ODQxODQ5OSwiZXhwIjoxNTg4NTA0ODk5fQ.a03SigF69iUXjIfB-LxKvOa8uIun5i2i39R_iORceEzveHjCSG-0zziX3oo2quHhVrwwk8MnDruzxLbLkwLBdmIq_omXWnlH6TIwxOcas7cKWE-nHG1-EDCUnZQBD1C9AXnyK-HJ8_OGyEK4u2u-fcPEXHG3y3Grx_G4NtRpOV_cR79Iv6ijVINMBu5mjrM9Y0LvtgFyNHBwA4Q-b26-Px4ntf0OEGYIP2s3en97RJyT8TMrpLLfaXcl6pDjq3Xom3Nats7AE_sHY1ID6WE8qXQisSunBV9DEr03f4O9IbQQNNxQO14QogeFDZKw9sBE0ImtqDf57I59A9Igrl6rtQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://todo-7.herokuapp.com/api/v1/todo",
+							"protocol": "https",
+							"host": [
+								"todo-7",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"todo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pending todos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "access-token",
+								"type": "text",
+								"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ0b2RvYXBwLmNvbSIsInN1YiI6ImFwaV9BY2Nlc3NUb2tlbiIsImlzcyI6InRvZG9hcHAuY29tIiwiZW1haWwiOiJwcnVkaHZpcmVkZHkubTAxQGdtYWlsLmNvbSIsImlhdCI6MTU4ODQxODQ5OSwiZXhwIjoxNTg4NTA0ODk5fQ.a03SigF69iUXjIfB-LxKvOa8uIun5i2i39R_iORceEzveHjCSG-0zziX3oo2quHhVrwwk8MnDruzxLbLkwLBdmIq_omXWnlH6TIwxOcas7cKWE-nHG1-EDCUnZQBD1C9AXnyK-HJ8_OGyEK4u2u-fcPEXHG3y3Grx_G4NtRpOV_cR79Iv6ijVINMBu5mjrM9Y0LvtgFyNHBwA4Q-b26-Px4ntf0OEGYIP2s3en97RJyT8TMrpLLfaXcl6pDjq3Xom3Nats7AE_sHY1ID6WE8qXQisSunBV9DEr03f4O9IbQQNNxQO14QogeFDZKw9sBE0ImtqDf57I59A9Igrl6rtQ"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://todo-7.herokuapp.com/api/v1/todo/pending",
+							"protocol": "https",
+							"host": [
+								"todo-7",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"todo",
+								"pending"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "completed todos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "access-token",
+								"type": "text",
+								"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ0b2RvYXBwLmNvbSIsInN1YiI6ImFwaV9BY2Nlc3NUb2tlbiIsImlzcyI6InRvZG9hcHAuY29tIiwiZW1haWwiOiJwcnVkaHZpcmVkZHkubTAxQGdtYWlsLmNvbSIsImlhdCI6MTU4ODQxODQ5OSwiZXhwIjoxNTg4NTA0ODk5fQ.a03SigF69iUXjIfB-LxKvOa8uIun5i2i39R_iORceEzveHjCSG-0zziX3oo2quHhVrwwk8MnDruzxLbLkwLBdmIq_omXWnlH6TIwxOcas7cKWE-nHG1-EDCUnZQBD1C9AXnyK-HJ8_OGyEK4u2u-fcPEXHG3y3Grx_G4NtRpOV_cR79Iv6ijVINMBu5mjrM9Y0LvtgFyNHBwA4Q-b26-Px4ntf0OEGYIP2s3en97RJyT8TMrpLLfaXcl6pDjq3Xom3Nats7AE_sHY1ID6WE8qXQisSunBV9DEr03f4O9IbQQNNxQO14QogeFDZKw9sBE0ImtqDf57I59A9Igrl6rtQ"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://todo-7.herokuapp.com/api/v1/todo/completed",
+							"protocol": "https",
+							"host": [
+								"todo-7",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"todo",
+								"completed"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
