@@ -18,12 +18,6 @@ jobs:
           steps:
             - run: npm install
             - run: npm test
-  - heroku_deploy
-
-workflows:
-  build-and-test:
-    jobs:
-      - build-and-test
   heroku_deploy:
     jobs:
        - deploy
@@ -33,4 +27,19 @@ workflows:
            filters:
              branches:
                only: circleci-project-setup 
+      # only run deploy-via-git job on master branch
+
+workflows:
+  build-and-test:
+    jobs:
+      - build-and-test
+#  heroku_deploy:
+#    jobs:
+#       - deploy
+#       - heroku/deploy-via-git:
+#           requires:
+#             - deploy # only run deploy-via-git job if the build job has completed
+#           filters:
+#             branches:
+#               only: circleci-project-setup 
       # only run deploy-via-git job on master branch
