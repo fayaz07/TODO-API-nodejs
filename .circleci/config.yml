@@ -9,6 +9,11 @@ jobs:
       name: node/default
     steps:
       - checkout
+      # pulling keys from .env
+      - run: source '.env' && echo $PRIVATE_KEY >> keys/private.pem
+      - run: source '.env' && echo $PUBLIC_KEY >> keys/public.pem
+      - run: source '.env' && echo $PRIVATER_KEY >> keys/privater.pem
+      - run: source '.env' && echo $PUBLICR_KEY >> keys/publicr.pem
       - node/with-cache:
           steps:
             - run: npm install
@@ -21,12 +26,6 @@ workflows:
       - build-and-test
   heroku_deploy:
     jobs:
-      steps:
-       - run: source '.env' && echo $PRIVATE_KEY >> keys/private.pem
-       - run: source '.env' && echo $PUBLIC_KEY >> keys/public.pem
-       - run: source '.env' && echo $PRIVATER_KEY >> keys/privater.pem
-       - run: source '.env' && echo $PUBLICR_KEY >> keys/publicr.pem
-
        - deploy
        - heroku/deploy-via-git:
            requires:
