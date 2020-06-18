@@ -231,7 +231,6 @@ For more info on openssl, click [here](https://www.openssl.org/)
 
 3. Setup environment variables
 Rename the ```.env.example``` as ```.env``` and fill up your details there. 
-
 #### SendGrid
 Create an account at SendGrid [SendGrid](https://sendgrid.com/). 
 Create a new API Key [here](https://app.sendgrid.com/settings/api_keys)
