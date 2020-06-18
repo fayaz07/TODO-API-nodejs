@@ -16,23 +16,6 @@
 
 First thing we need to do is to install **nodejs**, you can find the installation steps and archives from the official website [here](https://nodejs.org/en/). It is recommended to use the LTS version of node to avoid any kind of interruptions. 
 
-#### Install nodejs from command line (for linux)
-
-1. Update the dependencies
-```bash
-sudo apt update
-```
-
-2. Install ```nodejs```
-```bash
-sudo apt install nodejs
-```
-
-3. Install ```npm```
-```bash
-sudo apt install npm
-``` 
-
 #### Install specific version using CURL
 
 1. Install ```curl```

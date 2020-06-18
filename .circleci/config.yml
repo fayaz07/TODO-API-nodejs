@@ -10,14 +10,20 @@ jobs:
     steps:
       - checkout
       # pulling keys from .env
-      - run: source '.env' && echo $PRIVATE_KEY >> keys/private.pem
-      - run: source '.env' && echo $PUBLIC_KEY >> keys/public.pem
-      - run: source '.env' && echo $PRIVATER_KEY >> keys/privater.pem
-      - run: source '.env' && echo $PUBLICR_KEY >> keys/publicr.pem
+      - run: source '.env'
+      - run: echo $PRIVATE_KEY >> keys/private.pem
+      - run: echo $PUBLIC_KEY >> keys/public.pem
+      - run: echo $PRIVATER_KEY >> keys/privater.pem
+      - run: echo $PUBLICR_KEY >> keys/publicr.pem
       - node/with-cache:
           steps:
             - run: npm install
             - run: npm test
+
+workflows:
+  build-and-test:
+    jobs:
+      - build-and-test
   heroku_deploy:
     jobs:
        - deploy
@@ -27,19 +33,4 @@ jobs:
            filters:
              branches:
                only: circleci-project-setup 
-      # only run deploy-via-git job on master branch
-
-workflows:
-  build-and-test:
-    jobs:
-      - build-and-test
-#  heroku_deploy:
-#    jobs:
-#       - deploy
-#       - heroku/deploy-via-git:
-#           requires:
-#             - deploy # only run deploy-via-git job if the build job has completed
-#           filters:
-#             branches:
-#               only: circleci-project-setup 
       # only run deploy-via-git job on master branch
